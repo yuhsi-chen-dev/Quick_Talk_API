@@ -29,7 +29,17 @@ async function createMessage({
     messageStatus,
   ];
   const result = await pool.query(query, values);
-  return result.rows[0];
+  const newMessage = result.rows[0];
+
+  // 更新 conversations 表中的 last_message_id
+  const updateQuery = `
+    UPDATE conversations
+    SET last_message_id = $1
+    WHERE conversation_id = $2;
+  `;
+  await pool.query(updateQuery, [newMessage.message_id, conversationId]);
+
+  return newMessage;
 }
 
 // 查詢某個 conversation 的所有訊息（依時間排序）

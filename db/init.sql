@@ -19,7 +19,7 @@ CREATE TABLE users (
 CREATE TABLE conversations (
   conversation_id SERIAL PRIMARY KEY,
   conversation_type conversation_type NOT NULL,
-  last_message_id INTEGER,
+  last_message_id INTEGER REFERENCES messages(message_id) ON DELETE SET NULL,
   created_at TIMESTAMP DEFAULT NOW()
 );
 
