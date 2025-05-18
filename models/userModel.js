@@ -21,6 +21,15 @@ async function getUserById(userId) {
   return result.rows[0];
 }
 
+// 根據 phone_number 查詢單一用戶
+async function getUserByPhoneNumber(phone_number) {
+  const result = await pool.query(
+    'SELECT * FROM users WHERE phone_number = $1',
+    [phone_number]
+  );
+  return result.rows[0];
+}
+
 // 查詢所有使用者
 async function getAllUsers() {
   const result = await pool.query('SELECT * FROM users');
@@ -30,5 +39,6 @@ async function getAllUsers() {
 module.exports = {
   createUser,
   getUserById,
+  getUserByPhoneNumber,
   getAllUsers,
 };
