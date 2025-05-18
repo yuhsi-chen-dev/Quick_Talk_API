@@ -11,7 +11,7 @@ CREATE TYPE conversation_type AS ENUM ('direct', 'group');
 CREATE TABLE users (
   user_id SERIAL PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
-  phone_number VARCHAR(255),
+  phone_number VARCHAR(255) UNIQUE,
   about VARCHAR(255)
 );
 
@@ -21,6 +21,14 @@ CREATE TABLE conversations (
   conversation_type conversation_type NOT NULL,
   last_message_id INTEGER,
   created_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Conversations and Users (Join Table)
+CREATE TABLE conversation_participants (
+  id SERIAL PRIMARY KEY,
+  conversation_id INTEGER REFERENCES conversations(conversation_id) ON DELETE CASCADE,
+  user_id INTEGER REFERENCES users(user_id) ON DELETE CASCADE,
+  joined_at TIMESTAMP DEFAULT NOW()
 );
 
 -- Messages table
